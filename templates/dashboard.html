@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+<body class="dashboard-body">
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-dark dashboard-navbar">
+
+<div class="container">
+
+<span class="navbar-brand fw-bold">
+
+<i class="bi bi-mortarboard-fill"></i>
+
+Student Grade Management System
+
+</span>
+
+<a href="/logout" class="logout-link">
+
+<i class="bi bi-box-arrow-right"></i>
+
+Logout
+
+</a>
+
+</div>
+
+</nav>
+
+<!-- Welcome -->
+
+<div class="container">
+
+<div class="welcome-box">
+
+<h1>
+
+Welcome Back,
+
+<span>{{ student.name }}</span>
+
+👋
+
+</h1>
+
+<p>
+
+Manage your academic records from one place.
+
+</p>
+
+</div>
+
+<!-- Cards -->
+
+<div class="row g-4">
+
+<div class="col-md-6">
+
+<a href="/add-academic-record"
+class="dashboard-card blue">
+
+<i class="bi bi-mortarboard-fill"></i>
+
+<h3>Add Academic Record</h3>
+
+<p>Add School and College Records</p>
+
+</a>
+
+</div>
+
+<div class="col-md-6">
+
+<a href="/update"
+class="dashboard-card yellow">
+
+<i class="bi bi-pencil-square"></i>
+
+<h3>Update</h3>
+
+<p>Update Personal & Academic Details</p>
+
+</a>
+
+</div>
+
+<div class="col-md-6">
+
+<a href="/delete"
+class="dashboard-card red">
+
+<i class="bi bi-trash-fill"></i>
+
+<h3>Delete</h3>
+
+<p>Delete Student or Academic Records</p>
+
+</a>
+
+</div>
+
+<div class="col-md-6">
+
+<a href="/student-report"
+class="dashboard-card green">
+
+<i class="bi bi-file-earmark-text-fill"></i>
+
+<h3>Student Report</h3>
+
+<p>View Report & Download PDF</p>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+
+
+

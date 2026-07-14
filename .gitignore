@@ -1,0 +1,55 @@
+<<<<<<< HEAD
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+venv/
+.env
+
+.vscode/
+.idea/
+
+.DS_Store
+Thumbs.db
+=======
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# Python Environment
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build Files
+build/
+dist/
+*.egg-info/
+
+# MySQL Dump Files
+*.sql.bak
+
+# Pytest Cache
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+>>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
