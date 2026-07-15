@@ -3,10 +3,13 @@ from main import StudentGradeManagementSystem
 from flask import send_file
 from io import BytesIO
 from pdf_generator import PDFGenerator
-
+import os
 
 app = Flask(__name__)
-app.secret_key = "student_grade_manager_secret_key"
+app.secret_key = os.getenv(
+    "SECRET_KEY",
+    "student_grade_manager_secret_key"
+)
 system = StudentGradeManagementSystem()
 
 @app.route("/")
