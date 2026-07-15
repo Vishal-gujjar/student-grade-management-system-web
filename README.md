@@ -1,267 +1,404 @@
-# Student Grade Management System
+<div align="center">
 
-A command-line based **Student Grade Management System** developed using **Python**, **MySQL**, and **Object-Oriented Programming (OOP)**. The project manages a student's complete academic journey—from school education to multiple college degrees—through a single student account.
+# 🎓 Student Grade Management System (Web)
+
+## A Full-Stack Flask Web Application for Managing Student Academic Records
+
+A modern web-based student management system that enables students to securely manage their personal information, school and college academic records, calculate SGPA/CGPA, and generate professional PDF transcripts.
+
+---
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge)](YOUR_RENDER_URL)
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
+![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black?style=for-the-badge&logo=flask)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge&logo=bootstrap)
+![HTML5](https://img.shields.io/badge/HTML5-orange?style=for-the-badge&logo=html5)
+![CSS3](https://img.shields.io/badge/CSS3-blue?style=for-the-badge&logo=css3)
+
+</div>
 
 ---
 
-## Features
+## 📖 Overview
 
-### Student Management
+Student Grade Management System is a **Flask-based web application** designed to simplify the management of academic records. It provides a clean and user-friendly interface for storing, updating, and managing student information while automatically calculating academic performance metrics such as **SGPA** and **CGPA**.
 
-* Create a student account
-* Secure login using Student ID and password
-* Store and update personal details
-* Delete student account
+The application integrates **Python, Flask, MySQL, HTML, CSS, Bootstrap, and JavaScript** to create a responsive web platform with secure authentication and complete CRUD functionality.
 
-### Academic Record Management
-
-* Add multiple school academic records
-* Add multiple college academic records
-* Add additional subjects/courses to existing academic records
-* Update academic records
-* Update subjects/courses
-* Delete academic records
-* Delete subjects/courses
-
-### Smart User Interface
-
-* No manual Record ID entry
-* No manual Subject ID entry
-* Numbered selection menus for records and subjects
-* Update only the selected field instead of re-entering all information
-* Consistent menu-driven workflow for Add, Update, Delete, and Report operations
-
-### Report Generation
-
-* Complete student profile
-* School education displayed before college education
-* Subjects/Courses listed for every record
-* School average grade calculation
-* Semester GPA (SGPA)
-* Degree-wise CGPA (each degree has its own CGPA)
-* Semester credit summary
-* Degree credit summary
+Unlike traditional command-line implementations, this version offers an interactive dashboard, modern forms, validation, report generation, and downloadable PDF transcripts.
 
 ---
 
-## Project Structure
+## ✨ Key Features
+
+### 👤 Student Account Management
+
+- Create a secure student account
+- Student login authentication
+- Password protection
+- Session management
+- Update personal profile
+- Delete account with confirmation
+
+---
+
+### 🎓 Academic Record Management
+
+- Add School Academic Records
+- Add College Academic Records
+- Update existing academic records
+- Delete academic records
+- Automatic validation
+- Duplicate subject prevention
+
+---
+
+### 📊 Performance Analysis
+
+- Automatic SGPA calculation
+- Automatic CGPA calculation
+- Semester-wise transcript
+- Degree-wise report
+- Organized academic history
+
+---
+
+### 📄 Report Generation
+
+- Professional Student Report
+- PDF Transcript Generation
+- Personal Information Summary
+- School Education Summary
+- College Semester Summary
+
+---
+
+### 🎨 Modern User Interface
+
+- Responsive Bootstrap design
+- Dashboard-based navigation
+- Professional landing page
+- Interactive cards
+- Validation messages
+- Password visibility toggle
+- Clean and intuitive layout
+
+---
+
+### 🔒 Security Features
+
+- Login authentication
+- Password verification before deletion
+- Input validation
+- Protected dashboard
+- Session-based authentication
+
+---
+
+## 🛠️ Technology Stack
+
+| Category              | Technologies                         |
+|-----------------------|--------------------------------------|
+| Backend               | Python, Flask                        |
+| Frontend              | HTML5, CSS3, Bootstrap 5, JavaScript |
+| Database              | MySQL                                |
+| PDF Generation        | ReportLab                            |
+| Database Connectivity | mysql-connector-python               |
+| Version Control       | Git & GitHub                         |
+
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+
+The landing page introduces the application and provides quick access to login and account creation.
+
+![Home Page](images/home-page.png)
+
+---
+
+### 🔑 Login Page
+
+Secure login interface for authenticated student access.
+
+![Login Page](images/login-page.png)
+
+---
+
+### 👤 Create Account
+
+Registration page for creating a new student account with validation.
+
+![Create Account](images/create-account.png)
+
+---
+
+### 📋 Dashboard
+
+Central dashboard providing access to all academic management features.
+
+![Dashboard](images/dashboard.png)
+
+---
+
+### ✏️ Update Academic Records
+
+Manage and modify existing school and college academic records.
+
+![Update Academic Records](images/update-academic-record.png)
+
+---
+
+### 🗑️ Delete Student Account
+
+Confirmation dialog with password verification before permanent account deletion.
+
+![Delete Account](images/delete-account.png)
+
+---
+
+## 📂 Project Structure
 
 ```text
-Student_Grade_Manager/
+student-grade-management-system-web/
 │
-├── main.py
-├── database.py
-├── person.py
-├── student.py
-├── academic_manager.py
-├── grade_manager.py
-├── sql/
-│   └── schema.sql
+├── app.py                     # Flask application entry point
+├── main.py                    # Core application logic
+├── database.py                # MySQL database connection
+├── person.py                  # Person class
+├── student.py                 # Student class
+├── academic_manager.py        # Academic record management
+├── grade_manager.py           # Grade calculation logic
+├── pdf_generator.py           # PDF transcript generation
+├── requirements.txt           # Project dependencies
+├── LICENSE
 ├── README.md
-├── requirements.txt
-└── .gitignore
+│
+├── routes/
+│   └── auth.py                # Application routes
+│
+├── templates/                 # HTML templates
+│   ├── home.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── create_account.html
+│   ├── school_record.html
+│   ├── college_record.html
+│   ├── update_personal.html
+│   ├── update_academic.html
+│   ├── delete_academic.html
+│   ├── student_report.html
+│   └── ...
+│
+├── static/
+│   ├── style.css
+│   └── images/
+│
+├── images/                    # README screenshots
+│
+└── sql/
+    └── schema.sql             # Database schema
 ```
 
 ---
 
-## Technologies Used
+## ⚙️ Installation
 
-* Python 3
-* MySQL
-* mysql-connector-python
-* Object-Oriented Programming (OOP)
-
----
-
-## Database
-
-Database Name
-
-```text
-student_grade_manager
-```
-
-Tables
-
-* students
-* education_record
-* subject
-
-Database schema is available in:
-
-```text
-sql/schema.sql
-```
-
----
-
-## Installation
-
-### Clone the Repository
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Vishal-gujjar/student-grade-management-system-web.git
 ```
 
-or download the ZIP.
+```bash
+cd student-grade-management-system-web
+```
 
-### Install Dependencies
+---
+
+### 2️⃣ Create a Virtual Environment (Recommended)
+
+#### Windows
+
+```bash
+python -m venv venv
+```
+
+Activate the environment:
+
+```bash
+venv\Scripts\activate
+```
+
+#### Linux / macOS
+
+```bash
+python3 -m venv venv
+```
+
+Activate:
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+### 3️⃣ Install Required Packages
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Create Database
+---
 
-Run the SQL script:
+## 🗄️ Database Setup
+
+### Step 1
+
+Install **MySQL Server**.
+
+---
+
+### Step 2
+
+Create a new database.
+
+Example:
+
+```sql
+CREATE DATABASE student_grade_management;
+```
+
+---
+
+### Step 3
+
+Import the database schema.
 
 ```sql
 SOURCE sql/schema.sql;
 ```
 
-### Configure Database
+or import it using **MySQL Workbench**.
 
-Update the default values inside `database.py`:
+---
+
+### Step 4
+
+Open **database.py** and configure your database credentials.
 
 ```python
-host="localhost"
-user="root"
-password=""
-database="student_grade_manager"
+host = "localhost"
+user = "root"
+password = "YOUR_PASSWORD"
+database = "student_grade_management"
 ```
 
-Replace them with your own MySQL credentials.
+Replace the values with your own MySQL configuration.
 
-### Run the Project
+---
+
+## ▶️ Running the Application
+
+Start the Flask server.
 
 ```bash
-python main.py
+python app.py
 ```
 
----
+If everything is configured correctly, the application will start successfully.
 
-## Main Menu
+Open your browser and visit:
 
 ```text
-1. Create Account
-2. Add Academic Record
-3. Update
-4. Delete
-5. Student Report
-6. Exit
+http://127.0.0.1:5000
 ```
 
 ---
 
-## Grade System
-
-| Grade | Grade Point |
-| ----- | ----------: |
-| A+    |          10 |
-| A     |          10 |
-| A-    |           9 |
-| B     |           8 |
-| B-    |           7 |
-| C     |           6 |
-| C-    |           5 |
-| D     |           4 |
-| F     |           0 |
-
-Grade points are calculated in Python and are not stored in the database.
-
----
-
-## School Academic Records
-
-* Class 1 – Class 12
-* Credit automatically assigned as 3
-* Store:
-
-  * School Name
-  * Board
-  * Academic Year
-  * Subjects
-  * Grades
-
----
-
-## College Academic Records
-
-Supports multiple degrees, for example:
-
-* B.Tech
-* B.E.
-* B.Sc.
-* MBA
-* M.Tech
-* MCA
-* PhD
-
-Each semester stores:
-
-* College Name
-* Branch
-* Academic Year
-* Courses
-* Credits
-* Grades
-
----
-
-## Student Report
-
-The generated report includes:
-
-* Personal Details
-* School Education
-* College Education
-* Subject/Course Details
-* School Average
-* Semester GPA (SGPA)
-* Degree-wise CGPA
-* Semester Total Credits
-* Degree Total Credits Completed
-
----
-
-## Requirements
+## 🔄 Application Workflow
 
 ```text
-mysql-connector-python
+Create Account
+        │
+        ▼
+Login
+        │
+        ▼
+Dashboard
+        │
+ ┌──────┼──────────────┐
+ │      │              │
+ ▼      ▼              ▼
+School  College    Update Profile
+Record  Record
+ │        │
+ └────┬───┘
+      ▼
+Student Report
+      │
+      ▼
+Generate PDF
 ```
 
 ---
 
-## .gitignore
+## 🚀 Future Improvements
 
-```text
-__pycache__/
-*.pyc
-.vscode/
-.idea/
-.env
-```
+Some features that can be added in future versions include:
 
----
-
-## Future Improvements
-
-Possible future enhancements include:
-
-* School marks support in addition to grades
-* PDF report generation
-* Export report to Excel
-* Search students by name
-* Admin dashboard
-* Graphical User Interface (GUI)
-* Web version using Flask or Django
+- Email Verification
+- Password Reset via Email
+- Admin Dashboard
+- Student Profile Photo Upload
+- GPA Performance Charts
+- Advanced Search & Filters
+- Export Reports to Excel
+- Multi-user Roles (Admin, Faculty, Student)
+- REST API Integration
+- Docker Deployment
+- Cloud Database Support
+- Unit & Integration Testing
 
 ---
 
-## Author
+## 📚 Learning Outcomes
 
-Vishal Gurjar
+This project helped strengthen my understanding of:
 
-B.Tech Engineering Physics, IIT Hyderabad
+- Object-Oriented Programming (OOP)
+- Flask Web Development
+- RESTful Routing
+- CRUD Operations
+- MySQL Database Design
+- HTML, CSS, Bootstrap
+- Session Management
+- Form Validation
+- PDF Generation
+- Git & GitHub
+- Software Project Organization
 
-Python • MySQL • Object-Oriented Programming
+---
+
+## 👨‍💻 Author
+
+### Vishal
+
+B.Tech in Engineering Physics  
+Indian Institute of Technology Hyderabad (IITH)
+
+### GitHub
+
+[![GitHub](https://img.shields.io/badge/GitHub-Vishal--gujjar-181717?style=for-the-badge&logo=github)](https://github.com/Vishal-gujjar)
+
+---
+
+<div align="center">
+
+### Thank you for visiting this repository
+
+### Happy Coding! 🚀
+
+</div>
