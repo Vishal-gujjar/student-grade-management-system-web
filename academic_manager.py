@@ -75,7 +75,6 @@ class AcademicManager:
     # ==========================================================
     # Add Academic Record
     # ==========================================================
-<<<<<<< HEAD
     def add_school_record(
         self,
         student_id,
@@ -91,17 +90,10 @@ class AcademicManager:
             • Skip duplicate subjects.
         """
 
-=======
-    def add_school_record(self, student_id, level, school_name, board, academic_year, subjects):
-        """
-        subjects = [("English", "A+"), ("Math", "O")]
-        """
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
         if not self.is_valid_school_level(level):
             raise ValueError("Invalid school level.")
 
         try:
-<<<<<<< HEAD
 
             # --------------------------------------------------
             # Does this school record already exist?
@@ -183,20 +175,12 @@ class AcademicManager:
                 "added": added,
                 "skipped": skipped
             }
-=======
-            record_id = self._create_record(student_id, "School", level, school_name, board, academic_year)
-            for subject_name, grade in subjects:
-                self._insert_subject(record_id, subject_name, 3, grade)
-            self.db.commit()
-            return record_id
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
         except Exception:
             self.db.rollback()
             raise
 
 
-<<<<<<< HEAD
 
 
 
@@ -215,17 +199,10 @@ class AcademicManager:
             • Skip duplicate courses.
         """
 
-=======
-    def add_college_record(self, student_id, level, college_name, branch, academic_year, subjects):
-        """
-        subjects = [("Python", 4, "A+"), ("Physics", 3, "O")]
-        """
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
         if not self.is_valid_college_level(level):
             raise ValueError("Invalid college level.")
 
         try:
-<<<<<<< HEAD
 
             record = self.db.fetch_one(
                 """
@@ -288,14 +265,6 @@ class AcademicManager:
                 "added":added,
                 "skipped":skipped
             }
-=======
-            record_id = self._create_record(student_id, "College", level, college_name, branch, academic_year)
-            for subject_name, credit, grade in subjects:
-                self._insert_subject(record_id, subject_name, credit, grade)
-
-            self.db.commit()
-            return record_id
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
         except Exception:
             self.db.rollback()
@@ -371,7 +340,6 @@ class AcademicManager:
         self.db.execute_query(query, (subject_name, credit, grade.upper(), subject_id))
 
 
-<<<<<<< HEAD
     def update_school_record(
         self,
         record_id,
@@ -529,14 +497,11 @@ class AcademicManager:
 
             raise
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
     # ==========================================================
     # Delete
     # ==========================================================
     def delete_record(self, record_id):
-<<<<<<< HEAD
         try:
             self.db.execute_query(
                 """
@@ -550,9 +515,6 @@ class AcademicManager:
         except Exception:
             self.db.rollback()
             raise
-=======
-        self.db.execute_query("""DELETE FROM education_record WHERE record_id=%s""", (record_id,))
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
 
     def delete_subject(self, subject_id):
@@ -571,7 +533,6 @@ class AcademicManager:
         return self.db.fetch_all("""SELECT * FROM subject WHERE record_id=%s ORDER BY subject_name""", (record_id,))
     
 
-<<<<<<< HEAD
     def get_school_record(self, record_id):
 
         record = self.db.fetch_one(
@@ -640,8 +601,6 @@ class AcademicManager:
         }
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     def select_record(self, student_id):
         """
         Display all academic records of a student and
@@ -705,7 +664,6 @@ class AcademicManager:
     # Report
     # ==========================================================
     def generate_student_report(self, student_id):
-<<<<<<< HEAD
 
         from student import Student
 
@@ -871,59 +829,3 @@ class AcademicManager:
         )
 
         return report
-=======
-        school_records = []
-        college_records = {}
-
-        records = self.get_student_records(student_id)   
-        records.sort(key=lambda record: (0 if record["record_type"] == "School" else 1, record["level"]))
-
-        for record in records:
-            subjects = self.get_subjects(record["record_id"])
-            grades = [subject["grade"] for subject in subjects]
-            record_data = {
-                "record": record,
-                "subjects": subjects
-            }
-
-            # School
-            if record["record_type"] == "School":
-                record_data["average"] = GradeManager.calculate_average(grades)
-                school_records.append(record_data)
-
-            # College
-            else:
-                record_data["sgpa"] = GradeManager.calculate_sgpa(subjects)
-                record_data["total_credits"] = sum(subject["credit"] for subject in subjects)
-
-                degree = record["level"].split()[0]
-                if degree not in college_records:
-                    college_records[degree] = {
-                        "records": [],
-                        "all_subjects": [],
-                        "total_credits": 0
-                    }
-
-                college_records[degree]["records"].append(record_data)
-                college_records[degree]["all_subjects"].append(subjects)
-                college_records[degree]["total_credits"] += (record_data["total_credits"])
-
-        # Calculate Degree-wise CGPA
-        for degree in college_records:
-            college_records[degree]["cgpa"] = (GradeManager.calculate_cgpa(college_records[degree]["all_subjects"]))
-
-            # Sort semesters numerically
-            college_records[degree]["records"].sort(key=lambda item: int(item["record"]["level"].split()[-1]))
-
-        return {
-            "school": school_records,
-            "college": college_records
-        }
-
-
-
-
-
-
-    
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b

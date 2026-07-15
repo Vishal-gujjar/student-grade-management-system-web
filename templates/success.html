@@ -1,32 +1,131 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
 
-    <title>Success</title>
+<meta charset="UTF-8">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Account Created</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 </head>
 
-<body class="bg-light">
+<body class="auth-body">
 
-<div class="container mt-5">
+<div class="container py-4">
 
-<div class="alert alert-success">
+<!-- ================= TOP BAR ================= -->
 
-<h2>🎉 Account Created Successfully</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<hr>
+<a href="/"
+class="btn btn-outline-light auth-back">
 
-<h4>Your Student ID is {{ student_id }}</h4>
+<i class="bi bi-arrow-left"></i>
 
-<p>Please save this ID.</p>
+Home
 
-<a href="/login" class="btn btn-success">
+</a>
 
-Go To Login
+<h5 class="text-white fw-bold m-0">
+
+<i class="bi bi-mortarboard-fill"></i>
+
+Student Grade Management System
+
+</h5>
+
+</div>
+
+<!-- ================= SUCCESS CARD ================= -->
+
+<div class="login-card mx-auto">
+
+<div class="card-body">
+
+<div class="auth-header">
+
+<div class="auth-icon bg-success">
+
+<i class="bi bi-check-lg"></i>
+
+</div>
+
+<h2>
+
+Welcome to Student Grade Management System!
+
+</h2>
+
+<p>
+
+Your account has been created successfully.
+
+</p>
+
+</div>
+
+<div class="text-center mt-3">
+
+<h5 class="text-muted">
+
+Your Student ID
+
+</h5>
+
+<div class="border rounded-4 p-3 my-3 bg-light">
+
+<h1
+id="studentID"
+class="text-primary fw-bold">
+
+{{ student_id }}
+
+</h1>
+
+</div>
+
+<p class="text-danger">
+
+<i class="bi bi-exclamation-triangle-fill"></i>
+
+Please save this Student ID carefully.
+You will need it every time you log in.
+
+</p>
+
+</div>
+
+<div class="d-grid gap-3 mt-4">
+
+<button
+class="btn btn-outline-secondary auth-btn"
+onclick="copyStudentID()">
+
+<i class="bi bi-clipboard"></i>
+
+Copy Student ID
+
+</button>
+
+<a
+href="/login"
+class="btn btn-primary auth-btn">
+
+<i class="bi bi-box-arrow-in-right"></i>
+
+Login Now
 
 </a>
 
@@ -34,6 +133,66 @@ Go To Login
 
 </div>
 
+</div>
+
+</div>
+
+
+<!-- ================= COPY TOAST ================= -->
+
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+
+<div
+id="copyToast"
+class="toast align-items-center text-bg-success border-0"
+role="alert">
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+<i class="bi bi-check-circle-fill"></i>
+
+✅ Student ID copied to clipboard.
+
+</div>
+
+<button
+type="button"
+class="btn-close btn-close-white me-2 m-auto"
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function copyStudentID(){
+
+    const id =
+    document.getElementById("studentID").innerText;
+
+    navigator.clipboard.writeText(id);
+
+    const toast =
+    new bootstrap.Toast(document.getElementById("copyToast"));
+
+    toast.show();
+
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
+
+

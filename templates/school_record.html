@@ -3,75 +3,132 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 
-    <title>School Record</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-</head>
-
-<body class="bg-light">
-
-<div class="container mt-5">
-
-<div class="row justify-content-center">
-
-<div class="col-lg-9">
-
-<div class="card shadow">
-
-<div class="card-header
-{% if mode=='update' %}
-bg-warning text-dark
-{% else %}
-bg-primary text-white
-{% endif %}">
-
-<h2 class="text-center">
+<title>
 
 {% if mode=="update" %}
 
-Update School Education
+Update School Record
 
 {% else %}
 
-School Education
+School Academic Record
+
+{% endif %}
+
+</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+<body class="auth-body">
+
+<div class="container py-4">
+
+<!-- ================= TOP BAR ================= -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<a
+href="{% if mode=='update' %}/update{% else %}/dashboard{% endif %}"
+class="btn btn-outline-light auth-back">
+
+<i class="bi bi-arrow-left"></i>
+
+Back
+
+</a>
+
+<h5 class="text-white fw-bold m-0">
+
+<i class="bi bi-mortarboard-fill"></i>
+
+Student Grade Manager
+
+</h5>
+
+</div>
+
+<!-- ================= CARD ================= -->
+
+<div class="auth-card">
+
+<div class="auth-header">
+
+<div class="auth-icon">
+
+<i class="bi bi-building"></i>
+
+</div>
+
+<h2>
+
+{% if mode=="update" %}
+
+Update School Record
+
+{% else %}
+
+School Academic Record
 
 {% endif %}
 
 </h2>
 
+<p>
+
+Add your academic details.
+
+</p>
+
 </div>
 
-<div class="card-body">
+<div class="auth-form">
 
-    {% if success %}
+{% if success %}
+
 <div class="alert alert-success alert-dismissible fade show">
 
 {{ success|safe }}
-    <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert">
-    </button>
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="alert">
+
+</button>
 
 </div>
+
 {% endif %}
 
 {% if error %}
+
 <div class="alert alert-danger alert-dismissible fade show">
 
-    {{ error }}
+{{ error }}
 
-    <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert">
-    </button>
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="alert">
+
+</button>
 
 </div>
+
 {% endif %}
 
 <form
@@ -82,10 +139,10 @@ method="POST"
 
 action="{% if mode=='update' %}{{ request.path }}{% endif %}">
 
-    <input
-        type="hidden"
-        id="subjectsData"
-        name="subjects">
+<input
+type="hidden"
+id="subjectsData"
+name="subjects">
 
 <div class="row">
 
@@ -93,7 +150,7 @@ action="{% if mode=='update' %}{{ request.path }}{% endif %}">
 
 <label class="form-label">
 
-Level
+Education Level
 
 </label>
 
@@ -107,39 +164,21 @@ required>
 
 <option value="Class 10"
 {% if form.get("level")=="Class 10" %}selected{% endif %}>
+
 Class 10
+
 </option>
 
 <option value="Class 12"
 {% if form.get("level")=="Class 12" %}selected{% endif %}>
+
 Class 12
+
 </option>
 
 </select>
 
 </div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-
-School Name
-
-</label>
-
-<input
-type="text"
-class="form-control"
-id="school_name"
-name="school_name"
-value="{{ form.get('school_name','') }}"
-required>
-
-</div>
-
-</div>
-
-<div class="row">
 
 <div class="col-md-6 mb-3">
 
@@ -159,20 +198,49 @@ required>
 
 <option value="State Board"
 {% if form.get("board")=="State Board" %}selected{% endif %}>
+
 State Board
+
 </option>
 
 <option value="Central Board"
 {% if form.get("board")=="Central Board" %}selected{% endif %}>
+
 Central Board
+
 </option>
 
 <option value="Other Board"
 {% if form.get("board")=="Other Board" %}selected{% endif %}>
+
 Other Board
+
 </option>
 
 </select>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+School Name
+
+</label>
+
+<input
+type="text"
+class="form-control"
+id="school_name"
+name="school_name"
+value="{{ form.get('school_name','') }}"
+placeholder="Enter School Name"
+required>
 
 </div>
 
@@ -180,7 +248,7 @@ Other Board
 
 <label class="form-label">
 
-Academic Year
+Passing Year
 
 </label>
 
@@ -190,19 +258,20 @@ class="form-control"
 id="academic_year"
 name="academic_year"
 value="{{ form.get('academic_year','') }}"
+placeholder="2024-25"
 required>
 
 </div>
 
 </div>
 
-<hr>
+<hr class="my-4">
 
 <div class="d-flex justify-content-between align-items-center">
 
-<h4>
+<h4 class="fw-bold">
 
-Subjects
+📚 Subjects & Grades
 
 </h4>
 
@@ -212,25 +281,43 @@ class="btn btn-success"
 data-bs-toggle="modal"
 data-bs-target="#subjectModal">
 
-+ Add Subject
+<i class="bi bi-plus-circle"></i>
+
+Add Subject
 
 </button>
 
 </div>
 
-<table class="table table-bordered table-hover mt-3">
+<table class="table table-hover table-bordered mt-3 align-middle">
 
-<thead class="table-light">
+<thead class="table-primary">
 
 <tr>
 
-<th style="width:8%">#</th>
+<th width="8%">
 
-<th>Subject</th>
+#
 
-<th style="width:20%">Grade</th>
+</th>
 
-<th style="width:15%">Action</th>
+<th>
+
+Subject
+
+</th>
+
+<th width="20%">
+
+Grade
+
+</th>
+
+<th width="18%">
+
+Action
+
+</th>
 
 </tr>
 
@@ -252,19 +339,14 @@ No subjects added yet.
 
 </table>
 
-<div class="mt-4 d-flex justify-content-between">
+<div class="mt-4 text-end">
 
-<a
-href="{% if mode=='update' %}/update/school{% else %}/add-academic-record{% endif %}"
-class="btn btn-secondary">
-
-← Back
-
-</a>
 
 <button
 type="submit"
-class="btn {% if mode=='update' %}btn-warning{% else %}btn-primary{% endif %}">
+class="btn {% if mode=='update' %}btn-warning{% else %}btn-primary{% endif %} auth-btn">
+
+<i class="bi bi-floppy-fill"></i>
 
 {% if mode=="update" %}
 
@@ -272,7 +354,7 @@ Update Record
 
 {% else %}
 
-Create Record
+Save School Record
 
 {% endif %}
 
@@ -281,10 +363,6 @@ Create Record
 </div>
 
 </form>
-
-</div>
-
-</div>
 
 </div>
 
@@ -498,17 +576,17 @@ function refreshTable(){
 
             <button
             type="button"
-            class="btn btn-warning btn-sm edit">
+            class="btn btn-warning btn-sm rounded-circle edit">
 
-            Edit
+            <i class="bi bi-pencil-fill"></i>
 
             </button>
 
             <button
             type="button"
-            class="btn btn-danger btn-sm remove">
+            class="btn btn-danger btn-sm rounded-circle remove">
 
-            Delete
+            <i class="bi bi-trash-fill"></i>
 
             </button>
 
@@ -601,12 +679,14 @@ document.getElementById("saveSubject").onclick = function(){
 };
 
 
-document.addEventListener("click",function(e){
+document.addEventListener("click", function(e){
 
-    if(e.target.classList.contains("remove")){
+    const removeBtn = e.target.closest(".remove");
+    const editBtn = e.target.closest(".edit");
 
-        const row =
-        e.target.closest("tr");
+    if(removeBtn){
+
+        const row = removeBtn.closest("tr");
 
         const index =
         parseInt(row.cells[0].innerText)-1;
@@ -623,40 +703,35 @@ document.addEventListener("click",function(e){
 
         refreshTable();
 
-        document.getElementById("subjectsData").value=
-        JSON.stringify(subjects);
-
-        refreshTable();
-
     }
 
-    if(e.target.classList.contains("edit")){
+    if(editBtn){
 
-        const row =
-        e.target.closest("tr");
+        const row = editBtn.closest("tr");
 
         editIndex =
         parseInt(row.cells[0].innerText)-1;
 
-        document.getElementById("subjectName").value=
+        document.getElementById("subjectName").value =
         subjects[editIndex].name;
 
-        document.getElementById("subjectGrade").value=
+        document.getElementById("subjectGrade").value =
         subjects[editIndex].grade;
 
-        document.getElementById("saveSubject").innerText=
+        document.getElementById("saveSubject").innerText =
         "Save Changes";
 
-        const modal =
         new bootstrap.Modal(
             document.getElementById("subjectModal")
-        );
-
-        modal.show();
+        ).show();
 
     }
 
 });
+
+
+
+
 
 document.getElementById("schoolForm").addEventListener("submit", function(e){
     const year =

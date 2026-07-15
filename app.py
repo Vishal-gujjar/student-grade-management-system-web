@@ -217,7 +217,7 @@ def update_personal():
                 "Personal details updated successfully.", "success"
             )
 
-            return redirect(url_for("update"))
+            return redirect(url_for("dashboard"))
 
         except Exception as error:
             message = str(error)
@@ -258,6 +258,37 @@ def update_personal():
         error="",
         success=""
     )
+
+
+
+@app.route("/update/academic")
+def update_academic():
+
+    if "student_id" not in session:
+        return redirect(url_for("login"))
+
+    records = system.get_student_records(
+        session["student_id"]
+    )
+
+    school_records = [
+        record
+        for record in records
+        if record["record_type"] == "School"
+    ]
+
+    college_records = [
+        record
+        for record in records
+        if record["record_type"] == "College"
+    ]
+
+    return render_template(
+        "update_academic.html",
+        school_records=school_records,
+        college_records=college_records
+    )
+
 
 
 @app.route("/update/school")
@@ -309,7 +340,7 @@ def edit_school_record(record_id):
             )       
 
             return redirect(
-                url_for("update_school")
+                url_for("update_academic")
             )
 
         except Exception as error:
@@ -334,7 +365,7 @@ def edit_school_record(record_id):
         )
 
         return redirect(
-            url_for("update_school")
+            url_for("update_academic")
         )
 
     form = {
@@ -415,7 +446,7 @@ def edit_college_record(record_id):
             )
 
             return redirect(
-                url_for("update_college")
+                url_for("update_academic")
             )
 
         except Exception as error:
@@ -439,7 +470,7 @@ def edit_college_record(record_id):
         )
 
         return redirect(
-            url_for("update_college")
+            url_for("update_academic")
         )
 
     level = record["level"].split(" Sem ")
@@ -472,9 +503,39 @@ def edit_college_record(record_id):
     )
 
 
-@app.route("/delete")
+
+@app.route("/delete/academic")
+def delete_academic():
+
+    if "student_id" not in session:
+        return redirect(url_for("login"))
+
+    records = system.get_student_records(
+        session["student_id"]
+    )
+
+    school_records = [
+        record
+        for record in records
+        if record["record_type"] == "School"
+    ]
+
+    college_records = [
+        record
+        for record in records
+        if record["record_type"] == "College"
+    ]
+
+    return render_template(
+        "delete_academic.html",
+        school_records=school_records,
+        college_records=college_records
+    )
+
+
+@app.route("/delete/academic")
 def delete():
-    return render_template("delete.html")
+    return render_template("delete_academic.html")
 
 @app.route("/delete/school")
 def delete_school():
@@ -538,7 +599,7 @@ def delete_school_record(record_id):
         )
 
     return redirect(
-        url_for("delete_school")
+        url_for("delete_academic")
     )
 
 
@@ -561,7 +622,7 @@ def delete_college_record(record_id):
         )
 
     return redirect(
-        url_for("delete_college")
+        url_for("delete_academic")
     )
 
 

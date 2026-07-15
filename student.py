@@ -67,11 +67,7 @@ class Student(Person):
         if self.email_exists(self.email):
             raise ValueError("Email already registered.")
 
-<<<<<<< HEAD
         query = """INSERT INTO students(password, name, father_name, mother_name, date_of_birth, gender, phone, email, address) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-=======
-        query = """INSERT INTO student(password, name, father_name, mother_name, date_of_birth, gender, phone, email, address) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
         values = (self.password, self.name, self.father_name, self.mother_name, self.date_of_birth, self.gender, self.phone, self.email, self.address)
 
@@ -177,7 +173,6 @@ class Student(Person):
         self.password = new_password
 
 
-<<<<<<< HEAD
         # ----------------------------------------------------------
     # Update Account
     # ----------------------------------------------------------
@@ -214,13 +209,10 @@ class Student(Person):
 
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     # ----------------------------------------------------------
     # Delete Student
     # ----------------------------------------------------------
     def delete_student(self):
-<<<<<<< HEAD
         try:
             query = """
             DELETE FROM students
@@ -235,16 +227,6 @@ class Student(Person):
         except Exception:
             self.db.rollback()
             raise
-=======
-        """
-        Deletes the student account.
-        Related education records and subjects are
-        automatically removed through ON DELETE CASCADE.
-        """
-
-        query = """DELETE FROM students WHERE student_id=%s"""
-        self.db.execute_query(query, (self.student_id,))
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
 
     # ----------------------------------------------------------

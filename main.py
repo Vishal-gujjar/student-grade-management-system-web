@@ -9,11 +9,8 @@ Responsibilities
 - Call Student, AcademicManager and GradeManager methods
 """
 
-<<<<<<< HEAD
 from copy import error
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 from database import DatabaseManager
 from student import Student
 from academic_manager import AcademicManager
@@ -62,7 +59,6 @@ class StudentGradeManagementSystem:
     # ==========================================================
     # Authentication
     # ==========================================================
-<<<<<<< HEAD
     def get_student(self, student_id):
         student = Student(
             database_manager=self.db,
@@ -88,8 +84,6 @@ class StudentGradeManagementSystem:
         return student
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     def authenticate(self):
         try:
             student_id = int(input("Student ID : "))
@@ -99,28 +93,16 @@ class StudentGradeManagementSystem:
 
         password = input("Password : ")
 
-<<<<<<< HEAD
         try:
             return self.login_student(student_id, password)
         except Exception:
             print("Invalid Student ID or Password.")
             return None
 
-=======
-        student = Student(database_manager=self.db, student_id=student_id, password=password)
-        if not student.verify_password():
-            print("Invalid Student ID or Password.")
-            return None
-
-        student.load_student()
-        return student
-
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
 
     # ==========================================================
     # Create Account
     # ==========================================================
-<<<<<<< HEAD
     def create_student_account(
         self,
         name,
@@ -150,8 +132,6 @@ class StudentGradeManagementSystem:
         return student.create_account()
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     def create_account(self):
         print("\nCreate Student Account")
         name = input("Name : ")
@@ -169,7 +149,6 @@ class StudentGradeManagementSystem:
             print("Passwords do not match.")
             return
 
-<<<<<<< HEAD
         try:
             student_id = self.create_student_account(
                 name,
@@ -186,14 +165,6 @@ class StudentGradeManagementSystem:
             print("\nAccount created successfully.")
             print(f"Student ID : {student_id}")
 
-=======
-        student = Student(database_manager=self.db, password=password, name=name, father_name=father, mother_name=mother, date_of_birth=dob, gender=gender, phone=phone, email=email, address=address)
-
-        try:
-            student_id = student.create_account()
-            print(f"\nAccount created successfully.")
-            print(f"Student ID : {student_id}")
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
         except Exception as error:
             print(error)
 
@@ -201,7 +172,6 @@ class StudentGradeManagementSystem:
     # ==========================================================
     # Add Academic Record
     # ==========================================================
-<<<<<<< HEAD
     def create_school_record(
         self,
         student_id,
@@ -264,8 +234,6 @@ class StudentGradeManagementSystem:
         )
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     def add_academic_record(self):
         student = self.authenticate()
         if student is None:
@@ -326,7 +294,6 @@ class StudentGradeManagementSystem:
     # ==========================================================
     # Update
     # ==========================================================
-<<<<<<< HEAD
     def update_student_account(
         self,
         student_id,
@@ -404,8 +371,6 @@ class StudentGradeManagementSystem:
         student.delete_student()
 
 
-=======
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
     def update_menu(self):
         student = self.authenticate()
         if student is None:

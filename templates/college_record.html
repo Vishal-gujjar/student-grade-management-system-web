@@ -13,42 +13,77 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
 
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
-<body class="bg-light">
+<body class="auth-body">
 
-<div class="container mt-5">
+<div class="container py-4">
 
-<div class="row justify-content-center">
+<!-- ================= TOP BAR ================= -->
 
-<div class="col-lg-10">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="card shadow">
+<a
+href="{% if mode=='update' %}/update{% else %}/dashboard{% endif %}"
+class="btn btn-outline-light auth-back">
 
-<div class="card-header
-{% if mode=='update' %}
-bg-warning text-dark
-{% else %}
-bg-primary text-white
-{% endif %}">
+<i class="bi bi-arrow-left"></i>
 
-<h2 class="text-center">
+Back
+
+</a>
+
+<h5 class="text-white fw-bold m-0">
+
+<i class="bi bi-mortarboard-fill"></i>
+
+Student Grade Manager
+
+</h5>
+
+</div>
+
+<!-- ================= CARD ================= -->
+
+<div class="auth-card">
+
+<div class="auth-header">
+
+<div class="auth-icon">
+
+<i class="bi bi-journal-bookmark-fill"></i>
+
+</div>
+
+<h2>
 
 {% if mode=="update" %}
 
-Update College Education
+Update College Record
 
 {% else %}
 
-College Education
+College Academic Record
 
 {% endif %}
 
 </h2>
 
+<p>
+
+Add your semester courses and grades.
+
+</p>
+
 </div>
 
-<div class="card-body">
+<div class="auth-form">
 
 {% if success %}
 
@@ -282,7 +317,7 @@ required>
 
 <label class="form-label">
 
-Academic Year
+Passing Year
 
 </label>
 
@@ -299,17 +334,17 @@ required>
 
 </div>
 
-<hr>
+<hr class="my-4">
 
 <!-- ======================================= -->
 <!-- Course Table -->
 <!-- ======================================= -->
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="form-section">
 
-<h4>
+<h4 class="fw-bold">
 
-Courses
+📚 Courses & Grades
 
 </h4>
 
@@ -319,15 +354,17 @@ class="btn btn-success"
 data-bs-toggle="modal"
 data-bs-target="#courseModal">
 
-+ Add Course
+<i class="bi bi-plus-circle"></i>
+
+Add Course
 
 </button>
 
 </div>
 
-<table class="table table-bordered table-hover mt-3">
+<table class="table table-hover table-bordered align-middle shadow-sm">
 
-<thead class="table-light">
+<thead class="table-primary">
 
 <tr>
 
@@ -363,15 +400,9 @@ No courses added yet.
 
 </table>
 
-<div class="d-flex justify-content-between mt-4">
+<div class="mt-4 text-end">
 
-<a
-href="{% if mode=='update' %}/update/college{% else %}/add-academic-record{% endif %}"
-class="btn btn-secondary">
 
-← Back
-
-</a>
 
 <button
 type="submit"
@@ -383,7 +414,7 @@ Update Record
 
 {% else %}
 
-Create Record
+Save College Record
 
 {% endif %}
 
@@ -412,7 +443,7 @@ class="modal fade"
 id="courseModal"
 tabindex="-1">
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-dialog-centered">
 
 <div class="modal-content">
 
@@ -456,7 +487,8 @@ Course Name
 <input
 type="text"
 class="form-control"
-id="courseName">
+id="courseName"
+placeholder="Enter Course Name">
 
 </div>
 
@@ -715,17 +747,17 @@ table.insertAdjacentHTML(
 
 <button
 type="button"
-class="btn btn-warning btn-sm edit">
+class="btn btn-warning btn-sm rounded-circle edit">
 
-Edit
+<i class="bi bi-pencil-fill"></i>
 
 </button>
 
 <button
 type="button"
-class="btn btn-danger btn-sm remove">
+class="btn btn-danger btn-sm rounded-circle remove">
 
-Delete
+<i class="bi bi-trash-fill"></i>
 
 </button>
 
@@ -842,59 +874,59 @@ document.getElementById("courseModal")
 // Edit/Delete
 //----------------------------------------------------
 
-document.addEventListener("click",function(e){
+document.addEventListener("click", function(e){
 
-if(e.target.classList.contains("remove")){
+    const removeBtn = e.target.closest(".remove");
+    const editBtn = e.target.closest(".edit");
 
-const row=
-e.target.closest("tr");
+    if(removeBtn){
 
-const index=
-parseInt(row.cells[0].innerText)-1;
+        const row = removeBtn.closest("tr");
 
-if(courses[index].id){
-    courses[index].deleted = true;
-}
-else{
-    courses.splice(index,1);
-}
+        const index =
+        parseInt(row.cells[0].innerText)-1;
 
-refreshTable();
+        if(courses[index].id){
+            courses[index].deleted = true;
+        }
+        else{
+            courses.splice(index,1);
+        }
 
-document.getElementById("coursesData").value=
+        document.getElementById("coursesData").value =
+        JSON.stringify(courses);
 
-JSON.stringify(courses);
+        refreshTable();
 
-}
+    }
 
-if(e.target.classList.contains("edit")){
+    if(editBtn){
 
-const row=
-e.target.closest("tr");
+        const row = editBtn.closest("tr");
 
-editIndex=
-parseInt(row.cells[0].innerText)-1;
+        editIndex =
+        parseInt(row.cells[0].innerText)-1;
 
-document.getElementById("courseName").value=
-courses[editIndex].name;
+        document.getElementById("courseName").value =
+        courses[editIndex].name;
 
-document.getElementById("courseCredit").value=
-courses[editIndex].credit;
+        document.getElementById("courseCredit").value =
+        courses[editIndex].credit;
 
-document.getElementById("courseGrade").value=
-courses[editIndex].grade;
+        document.getElementById("courseGrade").value =
+        courses[editIndex].grade;
 
-document.getElementById("courseModalTitle")
-.innerText="Edit Course";
+        document.getElementById("courseModalTitle").innerText =
+        "Edit Course";
 
-document.getElementById("saveCourse")
-.innerText="Save Changes";
+        document.getElementById("saveCourse").innerText =
+        "Save Changes";
 
-new bootstrap.Modal(
-document.getElementById("courseModal")
-).show();
+        new bootstrap.Modal(
+            document.getElementById("courseModal")
+        ).show();
 
-}
+    }
 
 });
 

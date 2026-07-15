@@ -24,11 +24,7 @@ class DatabaseManager:
     - Close connection
     """
 
-<<<<<<< HEAD
     def __init__(self, host="localhost", user="root", password="Vishal_gurjar@1234", database="student_grade_manager"):
-=======
-    def __init__(self, host="localhost", user="root", password="", database="student_grade_manager_system"):
->>>>>>> 6fb370682a64f0b37c8df476e173a2b491196b1b
         self.host = host
         self.user = user
         self.password = password
