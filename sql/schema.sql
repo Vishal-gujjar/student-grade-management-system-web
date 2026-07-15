@@ -93,7 +93,7 @@ CREATE TABLE subject (
 
     credit INT NOT NULL,
 
-    grade ENUM('A+', 'A', 'A-' 'B', 'B-', 'C', 'C-', 'D', 'F') NOT NULL,
+    grade ENUM('A+', 'A', 'A-', 'B', 'B-', 'C', 'C-', 'D', 'F') NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

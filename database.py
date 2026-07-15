@@ -6,7 +6,7 @@ Student Grade Management System.
 
 Only this class directly interacts with MySQL.
 """
-
+import os
 import mysql.connector
 from mysql.connector import Error
 
@@ -24,11 +24,13 @@ class DatabaseManager:
     - Close connection
     """
 
-    def __init__(self, host="localhost", user="root", password="your_password", database="student_grade_manager"):
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
+    def __init__(self):
+        self.host = os.getenv("DB_HOST", "localhost")
+        self.user = os.getenv("DB_USER", "root")
+        self.password = os.getenv("DB_PASSWORD", "your_password")
+        self.database = os.getenv("DB_NAME", "student_grade_manager")
+        self.port = int(os.getenv("DB_PORT", "3306"))
+
         self.connection = None
         self.cursor = None
         self.connect()
@@ -42,7 +44,13 @@ class DatabaseManager:
         Establish connection with MySQL database.
         """
         try:
-            self.connection = mysql.connector.connect(host=self.host, user=self.user, password=self.password, database=self.database)
+            self.connection = mysql.connector.connect(
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.database,
+                port=self.port
+            )
             if self.connection.is_connected():
                 self.cursor = self.connection.cursor(dictionary=True)
 
