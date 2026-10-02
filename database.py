@@ -8,7 +8,6 @@ Only this class directly interacts with PostgreSQL.
 """
 
 import os
-
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extras import RealDictCursor
@@ -35,6 +34,7 @@ class DatabaseManager:
 
         self.connection = None
         self.cursor = None
+        self._row_count = 0
         self.connect()
 
     # ----------------------------------------------------------
@@ -54,18 +54,44 @@ class DatabaseManager:
             )
 
         except Error as error:
+            self.connection = None
+            self.cursor = None
             raise Exception(f"Database Connection Error : {error}")
+
+    def _ensure_connection(self):
+        """
+        Make sure the PostgreSQL connection and cursor are usable.
+        Reconnect if either one has become unusable.
+        """
+
+        if self.connection is None or self.connection.closed != 0:
+            self.connect()
+            return
+
+        if self.cursor is None or self.cursor.closed:
+            self.cursor = self.connection.cursor(
+                cursor_factory=RealDictCursor
+            )
 
     def disconnect(self):
         """
-        Close cursor and database connection.
+        Safely close cursor and database connection.
         """
-        if self.cursor is not None:
-            self.cursor.close()
+
+        try:
+            if self.cursor is not None and not self.cursor.closed:
+                self.cursor.close()
+        except Exception:
+            pass
+        finally:
             self.cursor = None
 
-        if self.connection is not None and not self.connection.closed:
-            self.connection.close()
+        try:
+            if self.connection is not None and self.connection.closed == 0:
+                self.connection.close()
+        except Exception:
+            pass
+        finally:
             self.connection = None
 
     # ----------------------------------------------------------
@@ -75,71 +101,112 @@ class DatabaseManager:
         """
         Execute INSERT / UPDATE / DELETE query.
 
-        If the query returns a row, for example:
-
-            INSERT ... RETURNING student_id
-
-        the first returned value is returned.
-
-        Otherwise, None is returned.
+        Returns:
+            First returned value when the query uses RETURNING.
+            Otherwise None.
         """
+
         try:
+            self._ensure_connection()
             if values is None:
                 self.cursor.execute(query)
             else:
                 self.cursor.execute(query, values)
 
+            self._row_count = self.cursor.rowcount
             result = None
 
-            if self.cursor.description is not None:
+            # PostgreSQL returns inserted IDs through RETURNING
+            if "RETURNING" in query.strip().upper():
                 result = self.cursor.fetchone()
 
             self.connection.commit()
-
             if result is not None:
-                return next(iter(result.values()))
+                return list(result.values())[0]
 
             return None
 
         except Error as error:
-            self.connection.rollback()
+            try:
+                self.connection.rollback()
+            except Exception:
+                pass
             raise Exception(f"Query Execution Error : {error}")
 
     def begin_transaction(self):
         """
-        Starts a database transaction.
+        Start a database transaction.
         """
+        self._ensure_connection()
         self.connection.autocommit = False
 
     def fetch_one(self, query, values=None):
         """
         Execute SELECT query and return one row.
         """
-        try:
-            if values is None:
-                self.cursor.execute(query)
-            else:
-                self.cursor.execute(query, values)
 
-            return self.cursor.fetchone()
+        for attempt in range(2):
 
-        except Error as error:
-            raise Exception(f"Fetch Error : {error}")
+            try:
+                self._ensure_connection()
+
+                if values is None:
+                    self.cursor.execute(query)
+                else:
+                    self.cursor.execute(query, values)
+
+                result = self.cursor.fetchone()
+
+                # End the transaction created by SELECT
+                self.connection.commit()
+
+                return result
+
+            except Error as error:
+
+                try:
+                    self.connection.rollback()
+                except Exception:
+                    pass
+
+                if attempt == 0:
+                    self.reconnect()
+                    continue
+
+                raise Exception(f"Fetch Error : {error}")
 
     def fetch_all(self, query, values=None):
         """
         Execute SELECT query and return all rows.
         """
-        try:
-            if values is None:
-                self.cursor.execute(query)
-            else:
-                self.cursor.execute(query, values)
 
-            return self.cursor.fetchall()
+        for attempt in range(2):
+            try:
+                self._ensure_connection()
 
-        except Error as error:
-            raise Exception(f"Fetch Error : {error}")
+                if values is None:
+                    self.cursor.execute(query)
+                else:
+                    self.cursor.execute(query, values)
+
+                result = self.cursor.fetchall()
+
+                # End the transaction created by SELECT
+                self.connection.commit()
+                return result
+
+            except Error as error:
+
+                try:
+                    self.connection.rollback()
+                except Exception:
+                    pass
+
+                if attempt == 0:
+                    self.reconnect()
+                    continue
+
+                raise Exception(f"Fetch Error : {error}")
 
     # ----------------------------------------------------------
     # Utility Methods
@@ -155,40 +222,48 @@ class DatabaseManager:
         """
         Returns number of rows affected by previous query.
         """
-        return self.cursor.rowcount
+        return self._row_count
 
     def commit(self):
-        """
-        Commit current transaction.
-        """
         try:
+            self._ensure_connection()
             self.connection.commit()
         except Error as error:
             raise Exception(f"Commit Error : {error}")
 
     def rollback(self):
-        """
-        Rollback current transaction.
-        """
         try:
+            self._ensure_connection()
             self.connection.rollback()
         except Error as error:
             raise Exception(f"Rollback Error : {error}")
 
     def reconnect(self):
         """
-        Reconnect to database.
+        Safely reconnect to PostgreSQL.
         """
-        self.disconnect()
+        try:
+            if self.cursor is not None and not self.cursor.closed:
+                self.cursor.close()
+        except Exception:
+            pass
+
+        try:
+            if self.connection is not None and self.connection.closed == 0:
+                self.connection.close()
+        except Exception:
+            pass
+
+        self.cursor = None
+        self.connection = None
         self.connect()
 
     def is_connected(self):
-        """
-        Returns True if database connection is active.
-        """
         return (
             self.connection is not None
-            and not self.connection.closed
+            and self.connection.closed == 0
+            and self.cursor is not None
+            and not self.cursor.closed
         )
 
     # ----------------------------------------------------------
