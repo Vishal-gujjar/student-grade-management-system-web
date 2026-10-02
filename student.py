@@ -67,7 +67,7 @@ class Student(Person):
         if self.email_exists(self.email):
             raise ValueError("Email already registered.")
 
-        query = """INSERT INTO students(password, name, father_name, mother_name, date_of_birth, gender, phone, email, address) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        query = """INSERT INTO students(password, name, father_name, mother_name, date_of_birth, gender, phone, email, address) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING student_id"""
 
         values = (self.password, self.name, self.father_name, self.mother_name, self.date_of_birth, self.gender, self.phone, self.email, self.address)
 

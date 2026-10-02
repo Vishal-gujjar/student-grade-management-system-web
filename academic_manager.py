@@ -309,7 +309,7 @@ class AcademicManager:
     # Internal Insert Helpers
     # ==========================================================
     def _create_record(self, student_id, record_type, level, organization, category, academic_year):
-        query = """INSERT INTO education_record(student_id, record_type, level, organization, category, academic_year) VALUES(%s,%s,%s,%s,%s,%s)"""
+        query = """INSERT INTO education_record(student_id, record_type, level, organization, category, academic_year) VALUES(%s,%s,%s,%s,%s,%s) RETURNING record_id"""
 
         return self.db.execute_query(query, (student_id, record_type, level, organization, category, academic_year))
 

@@ -1,14 +1,17 @@
 """
 database.py
 
-Handles all MySQL database communication for the
+Handles all PostgreSQL database communication for the
 Student Grade Management System.
 
-Only this class directly interacts with MySQL.
+Only this class directly interacts with PostgreSQL.
 """
+
 import os
-import mysql.connector
-from mysql.connector import Error
+
+import psycopg2
+from psycopg2 import Error
+from psycopg2.extras import RealDictCursor
 
 
 class DatabaseManager:
@@ -25,38 +28,33 @@ class DatabaseManager:
     """
 
     def __init__(self):
-        self.host = os.getenv("DB_HOST", "localhost")
-        self.user = os.getenv("DB_USER", "root")
-        self.password = os.getenv("DB_PASSWORD", "your_password")
-        self.database = os.getenv("DB_NAME", "student_grade_manager")
-        self.port = int(os.getenv("DB_PORT", "3306"))
+        self.database_url = os.getenv("DATABASE_URL")
+
+        if not self.database_url:
+            raise Exception("DATABASE_URL environment variable is not set.")
 
         self.connection = None
         self.cursor = None
         self.connect()
-
 
     # ----------------------------------------------------------
     # Connection Methods
     # ----------------------------------------------------------
     def connect(self):
         """
-        Establish connection with MySQL database.
+        Establish connection with PostgreSQL database.
         """
         try:
-            self.connection = mysql.connector.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                database=self.database,
-                port=self.port
+            self.connection = psycopg2.connect(
+                self.database_url
             )
-            if self.connection.is_connected():
-                self.cursor = self.connection.cursor(dictionary=True)
+
+            self.cursor = self.connection.cursor(
+                cursor_factory=RealDictCursor
+            )
 
         except Error as error:
             raise Exception(f"Database Connection Error : {error}")
-
 
     def disconnect(self):
         """
@@ -64,10 +62,11 @@ class DatabaseManager:
         """
         if self.cursor is not None:
             self.cursor.close()
+            self.cursor = None
 
-        if self.connection is not None and self.connection.is_connected():
+        if self.connection is not None and not self.connection.closed:
             self.connection.close()
-
+            self.connection = None
 
     # ----------------------------------------------------------
     # Query Execution
@@ -75,8 +74,14 @@ class DatabaseManager:
     def execute_query(self, query, values=None):
         """
         Execute INSERT / UPDATE / DELETE query.
-        Returns:
-            last inserted id (if available)
+
+        If the query returns a row, for example:
+
+            INSERT ... RETURNING student_id
+
+        the first returned value is returned.
+
+        Otherwise, None is returned.
         """
         try:
             if values is None:
@@ -84,20 +89,27 @@ class DatabaseManager:
             else:
                 self.cursor.execute(query, values)
 
+            result = None
+
+            if self.cursor.description is not None:
+                result = self.cursor.fetchone()
+
             self.connection.commit()
-            return self.cursor.lastrowid
+
+            if result is not None:
+                return next(iter(result.values()))
+
+            return None
 
         except Error as error:
             self.connection.rollback()
             raise Exception(f"Query Execution Error : {error}")
-        
 
     def begin_transaction(self):
         """
         Starts a database transaction.
         """
-        self.connection.start_transaction()
-
+        self.connection.autocommit = False
 
     def fetch_one(self, query, values=None):
         """
@@ -114,7 +126,6 @@ class DatabaseManager:
         except Error as error:
             raise Exception(f"Fetch Error : {error}")
 
-
     def fetch_all(self, query, values=None):
         """
         Execute SELECT query and return all rows.
@@ -130,7 +141,6 @@ class DatabaseManager:
         except Error as error:
             raise Exception(f"Fetch Error : {error}")
 
-
     # ----------------------------------------------------------
     # Utility Methods
     # ----------------------------------------------------------
@@ -141,13 +151,11 @@ class DatabaseManager:
         result = self.fetch_one(query, values)
         return result is not None
 
-
     def get_row_count(self):
         """
         Returns number of rows affected by previous query.
         """
         return self.cursor.rowcount
-
 
     def commit(self):
         """
@@ -158,7 +166,6 @@ class DatabaseManager:
         except Error as error:
             raise Exception(f"Commit Error : {error}")
 
-
     def rollback(self):
         """
         Rollback current transaction.
@@ -168,7 +175,6 @@ class DatabaseManager:
         except Error as error:
             raise Exception(f"Rollback Error : {error}")
 
-
     def reconnect(self):
         """
         Reconnect to database.
@@ -176,16 +182,14 @@ class DatabaseManager:
         self.disconnect()
         self.connect()
 
-
     def is_connected(self):
         """
         Returns True if database connection is active.
         """
         return (
             self.connection is not None
-            and self.connection.is_connected()
+            and not self.connection.closed
         )
-
 
     # ----------------------------------------------------------
     # Context Manager Support
@@ -193,10 +197,8 @@ class DatabaseManager:
     def __enter__(self):
         return self
 
-
     def __exit__(self, exc_type, exc_value, traceback):
         self.disconnect()
-
 
     # ----------------------------------------------------------
     # Destructor
@@ -206,7 +208,4 @@ class DatabaseManager:
             self.disconnect()
         except Exception:
             pass
-
-
-
 
