@@ -1,404 +1,282 @@
-<div align="center">
+# Student Grade Management System
 
-# 🎓 Student Grade Management System (Web)
+A Flask-based web application for managing student profiles and academic records. Students can maintain school and college records, add subjects and grades, calculate academic performance metrics such as SGPA and CGPA, and download a PDF report.
 
-## A Full-Stack Flask Web Application for Managing Student Academic Records
+<p align="center">
+  <a href="https://student-grade-management-system-web.onrender.com/">
+    <img src="https://img.shields.io/badge/Live%20Demo-Open%20Application-success?style=for-the-badge" alt="Open live demo">
+  </a>
+</p>
 
-A modern web-based student management system that enables students to securely manage their personal information, school and college academic records, calculate SGPA/CGPA, and generate professional PDF transcripts.
+**Live application:** <https://student-grade-management-system-web.onrender.com/>
 
----
-[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge)](YOUR_RENDER_URL)
-![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
-![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black?style=for-the-badge&logo=flask)
-![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=for-the-badge&logo=bootstrap)
-![HTML5](https://img.shields.io/badge/HTML5-orange?style=for-the-badge&logo=html5)
-![CSS3](https://img.shields.io/badge/CSS3-blue?style=for-the-badge&logo=css3)
+## Features
 
-</div>
+### Student account management
+- Create a student account and receive a student ID.
+- Log in and log out using a session-based flow.
+- View and update personal details.
+- Delete an account after password confirmation.
+- Validate duplicate phone numbers and email addresses.
 
----
+### Academic record management
+- Add, view, update, and delete school academic records.
+- Add, view, update, and delete college academic records by degree and semester.
+- Store institution, board/branch, and academic-year information.
+- Add subjects or courses with grades; college courses also store credit values.
+- Prevent duplicate academic records and duplicate subjects within a record.
 
-## 📖 Overview
+### Grade calculations and reports
+- Convert letter grades to grade points using the mapping defined in `grade_manager.py`.
+- Calculate school-record grade averages.
+- Calculate semester SGPA using credit-weighted grade points.
+- Calculate CGPA across the recorded college subjects.
+- View an academic report and download it as a PDF transcript.
 
-Student Grade Management System is a **Flask-based web application** designed to simplify the management of academic records. It provides a clean and user-friendly interface for storing, updating, and managing student information while automatically calculating academic performance metrics such as **SGPA** and **CGPA**.
+## Screenshots
 
-The application integrates **Python, Flask, MySQL, HTML, CSS, Bootstrap, and JavaScript** to create a responsive web platform with secure authentication and complete CRUD functionality.
+### Home page
+![Home page](images/home-page.png)
 
-Unlike traditional command-line implementations, this version offers an interactive dashboard, modern forms, validation, report generation, and downloadable PDF transcripts.
+### Login page
+![Login page](images/login-page.png)
 
----
+### Create account
+![Create account](images/create-account.png)
 
-## ✨ Key Features
-
-### 👤 Student Account Management
-
-- Create a secure student account
-- Student login authentication
-- Password protection
-- Session management
-- Update personal profile
-- Delete account with confirmation
-
----
-
-### 🎓 Academic Record Management
-
-- Add School Academic Records
-- Add College Academic Records
-- Update existing academic records
-- Delete academic records
-- Automatic validation
-- Duplicate subject prevention
-
----
-
-### 📊 Performance Analysis
-
-- Automatic SGPA calculation
-- Automatic CGPA calculation
-- Semester-wise transcript
-- Degree-wise report
-- Organized academic history
-
----
-
-### 📄 Report Generation
-
-- Professional Student Report
-- PDF Transcript Generation
-- Personal Information Summary
-- School Education Summary
-- College Semester Summary
-
----
-
-### 🎨 Modern User Interface
-
-- Responsive Bootstrap design
-- Dashboard-based navigation
-- Professional landing page
-- Interactive cards
-- Validation messages
-- Password visibility toggle
-- Clean and intuitive layout
-
----
-
-### 🔒 Security Features
-
-- Login authentication
-- Password verification before deletion
-- Input validation
-- Protected dashboard
-- Session-based authentication
-
----
-
-## 🛠️ Technology Stack
-
-| Category              | Technologies                         |
-|-----------------------|--------------------------------------|
-| Backend               | Python, Flask                        |
-| Frontend              | HTML5, CSS3, Bootstrap 5, JavaScript |
-| Database              | MySQL                                |
-| PDF Generation        | ReportLab                            |
-| Database Connectivity | mysql-connector-python               |
-| Version Control       | Git & GitHub                         |
-
----
-
-## 📸 Application Screenshots
-
-### 🏠 Home Page
-
-The landing page introduces the application and provides quick access to login and account creation.
-
-![Home Page](images/home-page.png)
-
----
-
-### 🔑 Login Page
-
-Secure login interface for authenticated student access.
-
-![Login Page](images/login-page.png)
-
----
-
-### 👤 Create Account
-
-Registration page for creating a new student account with validation.
-
-![Create Account](images/create-account.png)
-
----
-
-### 📋 Dashboard
-
-Central dashboard providing access to all academic management features.
-
+### Dashboard
 ![Dashboard](images/dashboard.png)
 
----
+### Update academic record
+![Update academic record](images/update-academic-record.png)
 
-### ✏️ Update Academic Records
+### Delete account
+![Delete account](images/delete-account.png)
 
-Manage and modify existing school and college academic records.
+## Technology Stack
 
-![Update Academic Records](images/update-academic-record.png)
+| Layer | Technology |
+|---|---|
+| Backend | Python, Flask |
+| Frontend | HTML, CSS, Bootstrap, JavaScript, Jinja templates |
+| Database | PostgreSQL |
+| Database driver | `psycopg2-binary` |
+| PDF generation | ReportLab |
+| Production application server | Gunicorn |
+| Version control | Git and GitHub |
 
----
+> **Database history:** An earlier command-line version of this project used MySQL. The current web application in this repository uses PostgreSQL through `psycopg2` and the `DATABASE_URL` environment variable. Both MySQL and PostgreSQL are relational database systems and use SQL, but their drivers and some SQL syntax differ. This repository contains the PostgreSQL implementation.
 
-### 🗑️ Delete Student Account
+## Application Architecture
 
-Confirmation dialog with password verification before permanent account deletion.
+The application separates web request handling, student and academic operations, grade calculations, database access, and PDF generation.
 
-![Delete Account](images/delete-account.png)
+```text
+Browser
+   |
+   v
+Flask routes and page rendering (app.py)
+   |
+   v
+Application operations (main.py)
+   |-- Student and personal information (student.py, person.py)
+   |-- Academic records and subjects (academic_manager.py)
+   |-- Grade calculations (grade_manager.py)
+   |
+   v
+Database access layer (database.py)
+   |
+   v
+PostgreSQL database
 
----
+Student report ---> PDFGenerator (pdf_generator.py) ---> PDF download
+```
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 student-grade-management-system-web/
-│
-├── app.py                     # Flask application entry point
-├── main.py                    # Core application logic
-├── database.py                # MySQL database connection
-├── person.py                  # Person class
-├── student.py                 # Student class
-├── academic_manager.py        # Academic record management
-├── grade_manager.py           # Grade calculation logic
-├── pdf_generator.py           # PDF transcript generation
-├── requirements.txt           # Project dependencies
-├── LICENSE
-├── README.md
-│
-├── routes/
-│   └── auth.py                # Application routes
-│
-├── templates/                 # HTML templates
-│   ├── home.html
-│   ├── login.html
-│   ├── dashboard.html
-│   ├── create_account.html
-│   ├── school_record.html
-│   ├── college_record.html
-│   ├── update_personal.html
-│   ├── update_academic.html
-│   ├── delete_academic.html
-│   ├── student_report.html
-│   └── ...
-│
-├── static/
-│   ├── style.css
-│   └── images/
-│
-├── images/                    # README screenshots
-│
-└── sql/
-    └── schema.sql             # Database schema
+|
+|-- app.py                 # Flask application and web routes
+|-- main.py                # Application operations used by the web layer
+|-- database.py            # PostgreSQL connection and query execution
+|-- person.py              # Base Person class
+|-- student.py             # Student account and profile operations
+|-- academic_manager.py    # School/college records and subject operations
+|-- grade_manager.py       # Grade-point, average, SGPA and CGPA calculations
+|-- pdf_generator.py       # PDF transcript generation
+|-- requirements.txt       # Python dependencies
+|-- sql/
+|   `-- schema.sql         # PostgreSQL tables, constraints and indexes
+|-- templates/             # Jinja/HTML pages
+|-- static/                # CSS, JavaScript and static assets
+|-- images/                # README screenshots
+|-- README.md
+`-- LICENSE
 ```
 
----
+## Database Design
 
-## ⚙️ Installation
+The PostgreSQL schema is defined in `sql/schema.sql` and contains three main tables:
 
-### 1️⃣ Clone the Repository
+| Table | Purpose |
+|---|---|
+| `students` | Student profile and account information |
+| `education_record` | School or college record associated with a student |
+| `subject` | Subjects/courses and their grades, associated with an education record |
+
+Relationships:
+- One student can have multiple education records.
+- One education record can contain multiple subjects/courses.
+- Foreign keys use `ON DELETE CASCADE` so dependent records are removed when their parent record is deleted.
+- Unique constraints help prevent duplicate phone numbers, email addresses, academic records, and subjects within a record.
+
+## Run Locally
+
+### Prerequisites
+- Python 3.x
+- Access to a PostgreSQL database
+- `psql` command-line client (or another PostgreSQL client) to apply the schema
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Vishal-gujjar/student-grade-management-system-web.git
-```
-
-```bash
 cd student-grade-management-system-web
 ```
 
----
+### 2. Create and activate a virtual environment
 
-### 2️⃣ Create a Virtual Environment (Recommended)
+**Windows PowerShell:**
 
-#### Windows
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**Windows Command Prompt:**
+
+```bat
+python -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+**macOS/Linux:**
 
 ```bash
-python -m venv venv
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-Activate the environment:
+### 3. Install dependencies
 
 ```bash
-venv\Scripts\activate
+python -m pip install -r requirements.txt
 ```
 
-#### Linux / macOS
+### 4. Configure environment variables
+
+Create a new, empty PostgreSQL database. Set the connection URL and Flask session secret in your shell. Use the connection URL provided by your database host; do not put real credentials in source code or commit them to GitHub.
+
+**Windows PowerShell:**
+
+```powershell
+$env:DATABASE_URL = "postgresql://USERNAME:PASSWORD@HOST:5432/DATABASE_NAME"
+$env:SECRET_KEY = "replace-with-a-long-random-secret"
+```
+
+**macOS/Linux:**
 
 ```bash
-python3 -m venv venv
+export DATABASE_URL="postgresql://USERNAME:PASSWORD@HOST:5432/DATABASE_NAME"
+export SECRET_KEY="replace-with-a-long-random-secret"
 ```
 
-Activate:
+Some hosted PostgreSQL providers require SSL parameters in the connection URL.
+
+### 5. Create the database tables
+
+Run the schema against the new database.
+
+**Windows PowerShell:**
+
+```powershell
+psql "$env:DATABASE_URL" -f .\sql\schema.sql
+```
+
+**macOS/Linux:**
 
 ```bash
-source venv/bin/activate
+psql "$DATABASE_URL" -f sql/schema.sql
 ```
 
----
+> **Important:** `sql/schema.sql` starts by dropping the `subject`, `education_record`, and `students` tables (using `CASCADE`) before recreating them. Run it only against a new/empty database, or back up existing data first. Running it against a database containing application data will delete that data.
 
-### 3️⃣ Install Required Packages
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 🗄️ Database Setup
-
-### Step 1
-
-Install **MySQL Server**.
-
----
-
-### Step 2
-
-Create a new database.
-
-Example:
-
-```sql
-CREATE DATABASE student_grade_management;
-```
-
----
-
-### Step 3
-
-Import the database schema.
-
-```sql
-SOURCE sql/schema.sql;
-```
-
-or import it using **MySQL Workbench**.
-
----
-
-### Step 4
-
-Open **database.py** and configure your database credentials.
-
-```python
-host = "localhost"
-user = "root"
-password = "YOUR_PASSWORD"
-database = "student_grade_management"
-```
-
-Replace the values with your own MySQL configuration.
-
----
-
-## ▶️ Running the Application
-
-Start the Flask server.
+### 6. Start the application
 
 ```bash
 python app.py
 ```
 
-If everything is configured correctly, the application will start successfully.
+Open <http://127.0.0.1:5000> in your browser.
 
-Open your browser and visit:
+## Deployment
+
+The project includes Gunicorn in `requirements.txt` and can be served by a WSGI-compatible hosting platform.
+
+Typical Render settings:
+
+- **Build command:** `pip install -r requirements.txt`
+- **Start command:** `gunicorn app:app`
+- **Environment variables:** `DATABASE_URL` and `SECRET_KEY`
+
+The hosted PostgreSQL database must already contain the tables defined in `sql/schema.sql`. Keep database credentials and secret keys in the hosting provider's environment-variable settings; never commit them to GitHub.
+
+## Grade Calculation
+
+The grade-point mapping is defined in `grade_manager.py`:
+
+| Grade | Grade point |
+|---|---:|
+| A+, A | 10 |
+| A- | 9 |
+| B | 8 |
+| B- | 7 |
+| C | 6 |
+| C- | 5 |
+| D | 4 |
+| F | 0 |
+
+**SGPA**
 
 ```text
-http://127.0.0.1:5000
+SGPA = Sum(credit × grade_point) / Sum(credits)
 ```
 
----
-
-## 🔄 Application Workflow
+**CGPA**
 
 ```text
-Create Account
-        │
-        ▼
-Login
-        │
-        ▼
-Dashboard
-        │
- ┌──────┼──────────────┐
- │      │              │
- ▼      ▼              ▼
-School  College    Update Profile
-Record  Record
- │        │
- └────┬───┘
-      ▼
-Student Report
-      │
-      ▼
-Generate PDF
+CGPA = Sum(all subject credit × grade_point values) / Sum(all subject credits)
 ```
 
----
+School-record averages are calculated separately from the credit-weighted college GPA calculations.
 
-## 🚀 Future Improvements
+## Security Considerations
 
-Some features that can be added in future versions include:
+This is an academic/learning project and has not been hardened for storing sensitive real-world personal information. Before using it with real student data, important improvements include:
 
-- Email Verification
-- Password Reset via Email
-- Admin Dashboard
-- Student Profile Photo Upload
-- GPA Performance Charts
-- Advanced Search & Filters
-- Export Reports to Excel
-- Multi-user Roles (Admin, Faculty, Student)
-- REST API Integration
-- Docker Deployment
-- Cloud Database Support
-- Unit & Integration Testing
+- Hash passwords with a password-hashing function instead of storing plain-text passwords.
+- Remove the hardcoded fallback Flask secret key and require a strong `SECRET_KEY` from the environment.
+- Add CSRF protection to forms and configure secure session-cookie settings.
+- Disable Flask debug mode outside local development.
+- Review input validation and authorization checks for every state-changing operation.
 
----
+Never commit `.env` files, database connection strings, passwords, API tokens, private keys, or production student data.
 
-## 📚 Learning Outcomes
+## License
 
-This project helped strengthen my understanding of:
+This project is available under the MIT License. See [LICENSE](LICENSE).
 
-- Object-Oriented Programming (OOP)
-- Flask Web Development
-- RESTful Routing
-- CRUD Operations
-- MySQL Database Design
-- HTML, CSS, Bootstrap
-- Session Management
-- Form Validation
-- PDF Generation
-- Git & GitHub
-- Software Project Organization
+## Author
 
----
-
-## 👨‍💻 Author
-
-### Vishal
-
-B.Tech in Engineering Physics  
-Indian Institute of Technology Hyderabad (IITH)
-
-### GitHub
-
-[![GitHub](https://img.shields.io/badge/GitHub-Vishal--gujjar-181717?style=for-the-badge&logo=github)](https://github.com/Vishal-gujjar)
-
----
-
-<div align="center">
-
-### Thank you for visiting this repository
-
-### Happy Coding! 🚀
-
-</div>
+**Vishal** — [GitHub](https://github.com/Vishal-gujjar)
